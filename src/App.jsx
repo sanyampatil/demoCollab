@@ -32,7 +32,7 @@ function App () {
             <Route path='/' element={<Home />} />
             <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login />} />
-            <Route path='/batches' element={<Batches />}></Route>
+            {/* <Route path='/batches' element={<Batches />}></Route>
             <Route
               path='/batch-selection-success'
               element={<BatchSelectionSuccess />}
@@ -40,9 +40,12 @@ function App () {
             <Route path='/process' element={<Step />} />
             <Route path='/user/profile' element={<UserProfile />}></Route>;
             <Route path='/about' element={<About />}></Route>
-            {/* <Route path='/application' element={<Application />}></Route> */}
-            {/* <Route path='/checkout/success' element={<CheckOutSuccess />}></Route>
-       <Route path='/checkout/fail' element={<CheckOutFail />}></Route> */}
+            <Route path='/application' element={<Application />}></Route>
+            <Route
+              path='/checkout/success'
+              element={<CheckOutSuccess />}
+            ></Route>
+            <Route path='/checkout/fail' element={<CheckOutFail />}></Route>
             <Route
               path='/user-registration'
               element={<UserRegistration />}
@@ -51,7 +54,7 @@ function App () {
               path='/user-registration/success'
               element={<UserRegistrationPaymentSuccess />}
             ></Route>
-            <Route path='/Admin-canData' element={<AllStudentData />} />
+            <Route path='/Admin-canData' element={<AllStudentData />} /> */}
           </Route>
         </Route>
       </Routes>
