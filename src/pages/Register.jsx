@@ -10,7 +10,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { isEmail, isPassword } from '../Helper/regexMatcher'
 import { RxCrossCircled } from 'react-icons/rx'
 import { Button } from '@mui/material'
-import { getRazorPayId, purchaseCourseBundle, verifyUserPayment } from '../redux/slices/registrationPaymentSlice'
+import {
+  getRazorPayId,
+  purchaseCourseBundle,
+  verifyUserPayment
+} from '../redux/slices/registrationPaymentSlice'
 const Register = () => {
   const [registeData, setregisteData] = useState({
     username: '',
@@ -23,52 +27,55 @@ const Register = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const data = useSelector((state) => state?.userRegistration)
+  const data = useSelector(state => state?.userRegistration)
   console.log(data)
-  const razorpayKey = useSelector((state) => state?.userRegistration?.RegisterKey);
-  const subscription_id = useSelector((state) => state?.userRegistration?.RegistraterSubscription_id);
-
+  const razorpayKey = useSelector(state => state?.userRegistration?.RegisterKey)
+  const subscription_id = useSelector(
+    state => state?.userRegistration?.RegistraterSubscription_id
+  )
 
   const paymentDetails = {
-    razorpay_payment_id: "",
-    razorpay_subscription_id: "",
-    razorpay_signature: ""
+    razorpay_payment_id: '',
+    razorpay_subscription_id: '',
+    razorpay_signature: ''
   }
   console.log('razorpayKey', razorpayKey)
 
-  async function handleSubscription(e) {
-    e.preventDefault();
+  async function handleSubscription (e) {
+    e.preventDefault()
     console.log('heello')
     if (!razorpayKey || !subscription_id) {
-      toast.error("Something went wrong");
-      return;
+      toast.error('Something went wrong')
+      return
     }
     const options = {
       key: razorpayKey,
       subscription_id: subscription_id,
-      name: " यवतमाळ क्रीडा संकुलन समिती",
-      description: "Subscription",
+      name: ' यवतमाळ क्रीडा संकुलन समिती',
+      description: 'Subscription',
       theme: {
         color: '#0000'
       },
 
       handler: async function (response) {
-        paymentDetails.razorpay_payment_id = response.razorpay_payment_id;
-        paymentDetails.razorpay_signature = response.razorpay_signature;
-        paymentDetails.razorpay_subscription_id = response.razorpay_subscription_id;
-        toast.success("Payment successfull");
-        const res = await dispatch(verifyUserPayment(paymentDetails));
+        paymentDetails.razorpay_payment_id = response.razorpay_payment_id
+        paymentDetails.razorpay_signature = response.razorpay_signature
+        paymentDetails.razorpay_subscription_id =
+          response.razorpay_subscription_id
+        toast.success('Payment successfull')
+        const res = await dispatch(verifyUserPayment(paymentDetails))
         console.log('navigate res', res)
-        toast.success(res?.payload?.msg);
-        res?.payload?.success ? navigate("/checkout/success") : navigate("/checkout/fail");
+        toast.success(res?.payload?.msg)
+        res?.payload?.success
+          ? navigate('/checkout/success')
+          : navigate('/checkout/fail')
       }
     }
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
+    const paymentObject = new window.Razorpay(options)
+    paymentObject.open()
   }
 
-
-  function handleUserInput(e) {
+  function handleUserInput (e) {
     const { name, value } = e.target
     setregisteData({
       ...registeData,
@@ -77,11 +84,15 @@ const Register = () => {
     console.log(registeData)
   }
 
-
   const handleRegister = async e => {
     e.preventDefault()
     console.log('hello')
-    if (!registeData.username || !registeData.email || !registeData.Mo_number || !registeData.password) {
+    if (
+      !registeData.username ||
+      !registeData.email ||
+      !registeData.Mo_number ||
+      !registeData.password
+    ) {
       toast.error('All field are required')
       return
     }
@@ -105,9 +116,8 @@ const Register = () => {
 
     setShow(true)
 
-    await dispatch(getRazorPayId());
-    await dispatch(purchaseCourseBundle());
-
+    await dispatch(getRazorPayId())
+    await dispatch(purchaseCourseBundle())
 
     const formData = new FormData()
     formData.append('username', registeData.username)
@@ -124,19 +134,17 @@ const Register = () => {
     //   setShow(true)
     // }
 
-
     setregisteData({
       username: '',
       email: '',
       password: '',
       Mo_number: ''
     })
-
   }
 
   useEffect(() => {
-    dispatch(getRazorPayId());
-  }, []);
+    dispatch(getRazorPayId())
+  }, [])
   return (
     <>
       <section className='authPage h-[100vh] w-[100vw] bg-blue-200'>
@@ -146,7 +154,8 @@ const Register = () => {
           </div>
           <form
             onSubmit={handleRegister}
-            className='lg:p-10  p-5 rounded-lg border-1 shadow-xl border-black  lg:w-[35vw]'>
+            className='lg:p-10  p-5 rounded-lg border-1 shadow-xl border-black  lg:w-[35vw]'
+          >
             {/* <div className='inputTag'>
               <label>Register As</label>
               <div>
@@ -159,19 +168,14 @@ const Register = () => {
               </div>
             </div> */}
             <div>
-              {
-                show &&
+              {show && (
                 <div className=' absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 z-10 flex items-center justify-center'>
                   <div className=' w-[50%] h-3/6 bg-gray-600 rounded-lg shadow-[0_0_10px_black] flex flex-col items-center justify-center'>
-                    {
-                      localStorage.setItem('numberOfCourses', 0)
-                    }
+                    {localStorage.setItem('numberOfCourses', 0)}
                     <p className=' text-black text-2xl font-semibold'>
                       you have the Rs.100 payment as the registration fee
                     </p>
-                    <Button
-                      onClick={handleSubscription}
-                    >
+                    <Button onClick={handleSubscription}>
                       proceed to payment
                     </Button>
                   </div>
@@ -182,7 +186,7 @@ const Register = () => {
                     />
                   </div>
                 </div>
-              }
+              )}
             </div>
             <div className='inputTag '>
               <label>Name</label>
@@ -236,11 +240,7 @@ const Register = () => {
                 <RiLock2Fill />
               </div>
             </div>
-            <button
-              type='submit'
-            >
-              Register
-            </button>
+            <button type='submit'>Register</button>
             <Link to={'/login'}>Login Now</Link>
           </form>
         </div>
@@ -250,7 +250,3 @@ const Register = () => {
 }
 
 export default Register
-
-
-
-
